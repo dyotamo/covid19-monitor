@@ -9,22 +9,25 @@ class Country extends Reportable {
 
   Country(this.name);
 
-  // res: [{"flag":"https://restcountries.eu/data/moz.svg"}]
+  // res: [{"flags":{"svg":"https://restcountries.com/data/moz.svg"}}]
   Future<String> get flag async {
-    return jsonDecode((await http.get(
-                'https://restcountries.eu/rest/v2/name/$name?fields=flag&fullText=true'))
-            .body)
-        .last['flag'];
+    final response = await http.get(
+        Uri.parse('https://restcountries.com/v3.1/name/$name?fields=flags&fullText=true'));
+    final List<dynamic> data = jsonDecode(response.body);
+    return data.first['flags']['svg'];
   }
 
-  factory Country.fromJson(name, reports) {
+  factory Country.fromJson(String name, List<dynamic> reports) {
     var country = Country(name);
-    reports.forEach((report) {
-      country.date = DateFormat('yyyy-mm-dd').parse(report['date']);
-      country.confirmed = report['confirmed'];
-      country.deaths = report['deaths'];
-      country.recovered = report['recovered'];
-    });
+    if (reports.isNotEmpty) {
+      var lastReport = reports.last;
+      if (lastReport['date'] != null) {
+        country.date = DateFormat('yyyy-MM-dd').parse(lastReport['date']);
+      }
+      country.confirmed = lastReport['confirmed'];
+      country.deaths = lastReport['deaths'];
+      country.recovered = lastReport['recovered'];
+    }
     return country;
   }
 

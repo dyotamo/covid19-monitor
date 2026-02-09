@@ -1,14 +1,15 @@
+import 'package:covid19/src/models/country.dart';
 import 'package:covid19/src/screens/home.dart';
 import 'package:flutter/material.dart';
 
 class CountrySearch extends SearchDelegate {
-  List results;
+  final List<Country> results;
 
-  CountrySearch({this.results})
+  CountrySearch({required this.results})
       : super(searchFieldLabel: 'Introduza o nome do país');
 
   @override
-  List<Widget> buildActions(BuildContext context) {
+  List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
         icon: Icon(Icons.clear),
@@ -18,7 +19,7 @@ class CountrySearch extends SearchDelegate {
   }
 
   @override
-  Widget buildLeading(BuildContext context) => IconButton(
+  Widget? buildLeading(BuildContext context) => IconButton(
         icon: Icon(Icons.arrow_back),
         onPressed: () => close(context, null),
       );

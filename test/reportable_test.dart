@@ -14,7 +14,7 @@ void main() {
   });
 
   test('Test Mozambique flag', () async {
-    expect('https://restcountries.eu/data/moz.svg',
+    expect('https://flagcdn.com/mz.svg',
         await Country('Mozambique').flag);
   });
 }
